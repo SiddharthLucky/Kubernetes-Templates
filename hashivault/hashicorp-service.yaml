@@ -1,0 +1,15 @@
+# authorizer-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hashvault-service
+  namespace: authorizer
+spec:
+  type: NodePort
+  ports:
+    - port: 8200          # Vault's default port
+      targetPort: 8200    # Container port
+      nodePort: 30002     # Fixed NodePort
+      protocol: TCP
+  selector:
+    app: hashvault
