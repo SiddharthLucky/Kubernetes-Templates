@@ -1,0 +1,28 @@
+# combined-services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: database
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+      targetPort: 5432
+      nodePort: 30003
+  selector:
+    app: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin-service
+  namespace: database
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30004
+  selector:
+    app: pgadmin
