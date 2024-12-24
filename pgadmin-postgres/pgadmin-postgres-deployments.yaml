@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:13
+          image: postgres:latest # Latest stable PostgreSQL version
           ports:
             - containerPort: 5432
           resources:
@@ -50,22 +50,33 @@ spec:
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
           readinessProbe:
             exec:
               command:
                 - pg_isready
                 - -U
-                - postgres
-            initialDelaySeconds: 5
+                - $(POSTGRES_USER)
+                - -d
+                - $(POSTGRES_DB)
+            initialDelaySeconds: 30
             periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
           livenessProbe:
             exec:
               command:
                 - pg_isready
                 - -U
-                - postgres
-            initialDelaySeconds: 30
+                - $(POSTGRES_USER)
+                - -d
+                - $(POSTGRES_DB)
+            initialDelaySeconds: 60
             periodSeconds: 20
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
@@ -93,7 +104,7 @@ spec:
     spec:
       containers:
         - name: pgadmin
-          image: dpage/pgadmin4
+          image: dpage/pgadmin4:latest  # Latest stable pgAdmin version
           ports:
             - containerPort: 80
           resources:
@@ -114,6 +125,21 @@ spec:
                 secretKeyRef:
                   name: pgadmin-secrets
                   key: PGADMIN_DEFAULT_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_DB
           volumeMounts:
             - name: pgadmin-storage
               mountPath: /var/lib/pgadmin

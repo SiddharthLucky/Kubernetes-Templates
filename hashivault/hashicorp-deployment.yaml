@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hashvault-deployment
+  name: hashvault
   namespace: authorizer
 spec:
   replicas: 1
