@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:latest # Latest stable PostgreSQL version
+          image: postgres:16.1  # Latest stable PostgreSQL version
           ports:
             - containerPort: 5432
           resources:
@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
         - name: pgadmin
-          image: dpage/pgadmin4:latest  # Latest stable pgAdmin version
+          image: dpage/pgadmin4:8.1  # Latest stable pgAdmin version
           ports:
             - containerPort: 80
           resources:
