@@ -2,10 +2,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: rabbitmq-pvc
-  namespace: messaging
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce  # Only one node can access it at a time
   resources:
     requests:
-      storage: 5Gi
+      storage: 2Gi  # Request 2 GiB of storage
