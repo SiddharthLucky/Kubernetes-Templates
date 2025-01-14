@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+  namespace: messaging
+spec:
+  storageClassName: local-mac
+  accessModes:
+    - ReadWriteOnce  # Only one node can access it at a time
+  resources:
+    requests:
+      storage: 2Gi  # Request 2 GiB of storage
+  selector:
+    matchLabels:
+      app: rabbitmq-pv

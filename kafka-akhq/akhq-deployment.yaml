@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: akhq
+  namespace: messaging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: akhq
+  template:
+    metadata:
+      labels:
+        app: akhq
+    spec:
+      containers:
+      - name: akhq
+        image: tchiotludo/akhq:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/application.yml
+          subPath: application.yml
+        resources:
+          requests:
+            memory: "768Mi"
+            cpu: "750m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: akhq-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: akhq-service
+  namespace: messaging
+spec:
+  selector:
+    app: akhq
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30008
+  type: NodePort

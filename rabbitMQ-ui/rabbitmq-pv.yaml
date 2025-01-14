@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rabbitmq-pv
+  namespace: messaging
+  labels:
+    type: local-mac
+    app: rabbitmq-pv
+spec:
+  storageClassName: local-mac
+  capacity:
+    storage: 2Gi  # Must match your PVC request
+  accessModes:
+    - ReadWriteOnce  # Must match your PVC accessModes
+  persistentVolumeReclaimPolicy: Retain # Or Delete, if you prefer to delete storage on volume release
+  hostPath:
+    path: /Users/siddharthlucky/Docker-Kube-StorageDrive/rabbitmq-storage  # <-------- Change This!
